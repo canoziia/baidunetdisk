@@ -1,0 +1,27 @@
+package main
+
+import (
+	dl "baidunetdisk/download"
+	"fmt"
+)
+
+func main() {
+	dl.Init("conf.ini")
+	fileInfoSlice, err := dl.GetMyFileList("/temp")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fsid := fileInfoSlice[2]["fsid"]
+	// fmt.Println(fileInfoSlice)
+	sign, timestamp := dl.GetMyParams()
+	dlink, err := dl.GetMyDownloadLink(fsid, sign, timestamp)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dlink)
+	realLink, err := dl.GetRealLink(dlink)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(realLink)
+}
